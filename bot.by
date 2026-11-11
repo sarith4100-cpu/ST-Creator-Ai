@@ -1,0 +1,39 @@
+
+import os
+from telegram import Update
+from telegram.ext import (
+    Application,
+    CommandHandler,
+    MessageHandler,
+    ContextTypes,
+    filters,
+)
+
+TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
+
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text(
+        "សួស្តី! 👋\n"
+        "សូមស្វាគមន៍មកកាន់ ST Creator AI 🇰🇭\n\n"
+        "កម្មវិធីនេះកំពុងរៀបចំប្រព័ន្ធបកប្រែរឿងចិន "
+        "ជាភាសាខ្មែរ មានសំឡេងតាមអាយុតួអង្គ "
+        "និងអក្សររត់ក្រោម។"
+    )
+
+async def receive_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text(
+        "ខ្ញុំបានទទួលវីដេអូរបស់អ្នកហើយ! 🎬\n"
+        "ប្រព័ន្ធបកប្រែ និងបង្កើតសំឡេងខ្មែរកំពុងរង់ចាំការតភ្ជាប់។"
+    )
+
+def main():
+    if not TOKEN:
+        raise RuntimeError("Missing TELEGRAM_BOT_TOKEN")
+
+    app = Application.builder().token(TOKEN).build()
+    app.add_handler(CommandHandler("start", start))
+    app.add_handler(MessageHandler(filters.VIDEO, receive_video))
+    app.run_polling()
+
+if __name__ == "__main__":
+    main()
